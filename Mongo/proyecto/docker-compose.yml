@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"  # Puerto para conectarse desde tu aplicación
+    volumes:
+      - mongo_data:/data/db  # Persistencia de datos
+
+volumes:
+  mongo_data:

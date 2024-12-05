@@ -1,0 +1,17 @@
+{
+    "name": "thegoat/proyecto",
+    "autoload": {
+        "psr-4": {
+            "Thegoat\\Proyecto\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "erick",
+            "email": "zouozshalom@gmail.com"
+        }
+    ],
+    "require": {
+        "spipu/html2pdf": "^5.2"
+    }
+}
