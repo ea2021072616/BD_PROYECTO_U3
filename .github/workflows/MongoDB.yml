@@ -17,12 +17,7 @@ jobs:
         image: mongo:latest
         ports:
           - 27017:27017  # Conectar a MongoDB
-        healthcheck:
-          test: 'curl --silent --fail localhost:27017 || exit 1'  # Verificar si MongoDB está disponible
-          interval: 10s
-          retries: 3
-          start_period: 5s
-          timeout: 5s
+        options: --health-cmd='curl --silent --fail localhost:27017' --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       # Paso para configurar el repositorio
@@ -37,8 +32,6 @@ jobs:
       # Paso para ejecutar pruebas o tareas (si tienes alguna de este tipo)
       - name: Run tests
         run: |
-          # Esperar un poco para asegurar que MongoDB esté completamente operativo
-          sleep 10
           docker-compose exec -T mongodb mongo --eval 'db.test.insert({ test: "value" })'  # Ejecuta una prueba en MongoDB
           # Agrega tus pruebas o tareas aquí
 
