@@ -1,0 +1,41 @@
+name: CI Workflow with MongoDB and Docker
+
+on:
+  push:
+    branches:
+      - main  # o cualquier otra rama que desees
+  pull_request:
+    branches:
+      - main  # o cualquier otra rama que desees
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017  # Conectar a MongoDB
+        options: --health-cmd='curl --silent --fail localhost:27017' --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      # Paso para configurar el repositorio
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Paso para configurar Docker Compose
+      - name: Set up Docker Compose
+        run: |
+          docker-compose -f docker-compose.yml up -d  # Levanta el contenedor MongoDB
+
+      # Paso para ejecutar pruebas o tareas (si tienes alguna de este tipo)
+      - name: Run tests
+        run: |
+          docker-compose exec -T mongodb mongo --eval 'db.test.insert({ test: "value" })'  # Ejecuta una prueba en MongoDB
+          # Agrega tus pruebas o tareas aquí
+
+      # Paso para detener y limpiar los contenedores
+      - name: Shutdown containers
+        run: |
+          docker-compose down
